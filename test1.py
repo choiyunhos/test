@@ -1,3 +1,1 @@
-#게시판만들기
-
-    
+print("Hello World")
