@@ -1,4 +1,5 @@
-#웹게시판 만들기
+#app.py
+
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -33,7 +34,7 @@ def index():
     else:
         boards = Board.query.order_by(Board.date_created).all()
         return render_template('index.html', boards=boards)
-    
+
 @app.route('/delete/<int:id>')
 def delete(id):
     board_to_delete = Board.query.get_or_404(id)
@@ -44,7 +45,7 @@ def delete(id):
         return redirect('/')
     except:
         return 'There was a problem deleting that board'
-
+    
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
     board = Board.query.get_or_404(id)
@@ -59,13 +60,5 @@ def update(id):
         except:
             return 'There was an issue updating your board'
 
-    else:
-        return render_template('update.html', board=board)
-    
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-
-
-
