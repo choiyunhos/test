@@ -3,7 +3,6 @@ import xml.etree.ElementTree as ET
 from urllib.request import urlopen
 from tqdm import trange
 import re
-import os
 
 case_list = pd.read_csv('교통사고.csv')
 contents = ['판시사항', '판결요지', '참조조문', '참조판례', '판례내용']

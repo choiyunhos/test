@@ -5,12 +5,14 @@ import re
 # 데이터 불러오기
 case_list = pd.read_csv('교통사고_with_contents.csv', encoding='cp949')
 
+cols_to_clean = ['clean_판시사항', 'clean_판결요지', 'clean_참조조문', 'clean_참조판례', 'clean_판례내용']
 
 # 텍스트 데이터 정제
 def clean_text(text):
     if isinstance(text, str):  # Check if 'text' is string instance
-        cleaned_text = re.sub(r'[^\s\d\w]', '', text)  # 특수문자 제거
-        return cleaned_text
+        cleaned_text = re.sub(r'[^\w\s]', '', text)  # 특수문자 제거 (문자, 숫자 제외)
+        cleaned_text = re.sub(r'\s+', ' ', cleaned_text)  # 연속된 공백 제거
+        return cleaned_text.strip()  # 양쪽 공백 제거
     else:
         return ''
 
@@ -26,7 +28,6 @@ def tokenize_text(text):
     result = [w for w in word_tokens if not w in korean_stopwords]
     return result
 
-# 전처리를 거쳐 새로운 컬럼에 저장
 case_list['clean_판시사항'] = case_list['판시사항'].apply(lambda x: tokenize_text(clean_text(x)))
 case_list['clean_판결요지'] = case_list['판결요지'].apply(lambda x: tokenize_text(clean_text(x)))
 case_list['clean_참조조문'] = case_list['참조조문'].apply(lambda x: tokenize_text(clean_text(x)))
@@ -37,3 +38,4 @@ case_list.drop(['판시사항', '판결요지', '참조조문', '참조판례', 
 
 # CSV 파일로 저장
 case_list.to_csv('교통사고_전처리.csv', index=False)
+
